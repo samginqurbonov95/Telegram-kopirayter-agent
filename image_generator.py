@@ -151,3 +151,60 @@ def generate_template_image(title: str, subtext: str = "") -> str:
     draw.text((40, 40), config.CENTER_NAME, font=name_font, fill=config.BRAND_COLOR_TEXT)
 
     filename = f"{config.GENERATED_DIR}/template_{int(time.time())}.png"
+    img.save(filename)
+    return filename
+
+
+def generate_ai_image(prompt: str) -> str:
+    """OpenAI DALL-E orqali rasm (endi faqat qo'shimcha/zaxira ehtiyoj uchun ishlatiladi)."""
+    if not config.OPENAI_API_KEY:
+        return generate_template_image(title=prompt[:40])
+
+    from openai import OpenAI
+    client = OpenAI(api_key=config.OPENAI_API_KEY)
+
+    style_note = design_profile.get_style_note()
+    style_part = f" Follow this brand visual style closely: {style_note}" if style_note else ""
+
+    full_prompt = (
+        f"{prompt}. Professional, clean, modern educational branding style, "
+        f"primary brand color {config.BRAND_COLOR_PRIMARY}, accent color "
+        f"{config.BRAND_COLOR_SECONDARY}.{style_part} "
+        f"No readable text in the image, no distorted faces."
+    )
+
+    result = client.images.generate(model="dall-e-3", prompt=full_prompt, size="1024x1024", n=1)
+
+    import requests
+    image_data = requests.get(result.data[0].url).content
+    filename = f"{config.GENERATED_DIR}/ai_{int(time.time())}.png"
+    with open(filename, "wb") as f:
+        f.write(image_data)
+    return filename
+
+
+# ---------------------------------------------------------------------------
+# ASOSIY YO'NALTIRUVCHI FUNKSIYA
+# ---------------------------------------------------------------------------
+
+# post_type -> badge matni (posterning yuqori qismidagi kichik yorliq)
+BADGE_LABELS = {
+    "marketing_post": "E'LON",
+    "news_post": "TA'LIM YANGILIGI",
+    "news_post_fallback": "E'LON",
+    "custom_task": "YANGILIK",
+    "elon": "RASMIY E'LON",
+}
+
+
+def generate_image_for_post(post_data: dict) -> str:
+    """post_data asosida to'g'ri rasm generatsiya usulini tanlaydi."""
+    headline = post_data.get("title", config.CENTER_NAME)
+    post_type = post_data.get("post_type", "")
+    badge = BADGE_LABELS.get(post_type, "YANGILIK")
+
+    if os.path.exists(POSTER_TEMPLATE_PATH):
+        return generate_branded_poster(headline, badge_text=badge)
+
+    # Zaxira: brend shabloni hali yuklanmagan bo'lsa
+    return generate_template_image(title=headline, subtext=post_data.get("hashtags", ""))
