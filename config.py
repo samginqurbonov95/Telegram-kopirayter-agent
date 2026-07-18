@@ -32,15 +32,15 @@ ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 
 # ---------- O'QUV MARKAZI PROFILI ----------
-CENTER_NAME = "Mening O'quv Markazim"          # <-- shu yerga nomini yozing
-CENTER_SUBJECTS = "IT, chet tillar, matematika"  # <-- yo'nalishlaringiz
+CENTER_NAME = "Samarqand til maktabi (STM)"          # <-- shu yerga nomini yozing
+CENTER_SUBJECTS = "Ingliz tili (IELTS/CEFR), Ona tili va adabiyot, Tarix, Huquqshunoslik, Matematika, SAT, Rus tili, Turk tili, Biologiya, Kimyo, Fizika, Geografiya"  # <-- yo'nalishlaringiz
 CENTER_AUDIENCE = "15-30 yoshdagi o'quvchi va talabalar"
 CENTER_TONE = "professional, ishonchli, do'stona, motivatsion — lekin haddan tashqari rasmiy emas"
-CENTER_LOCATION = "Toshkent"
+CENTER_LOCATION = "Samarqand"
 
 # Postlarda ishlatiladigan brend ranglari (HEX)
-BRAND_COLOR_PRIMARY = "#1B3A6B"     # asosiy rang (fon)
-BRAND_COLOR_SECONDARY = "#F2A72A"   # urg'u rangi (matn/chiziqlar)
+BRAND_COLOR_PRIMARY = "#1B4DA0"     # asosiy rang (fon)
+BRAND_COLOR_SECONDARY = "#E31E24"   # urg'u rangi (matn/chiziqlar)
 BRAND_COLOR_TEXT = "#FFFFFF"        # matn rangi
 
 LOGO_PATH = "assets/logo.png"
